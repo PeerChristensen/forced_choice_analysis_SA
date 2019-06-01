@@ -3,6 +3,7 @@
 # STELLENBOSCH, MAY 2018
 
 ####### LOAD PACKAGES ###################################################
+
 library(viridis)
 library(tidyverse)
 library(lme4)
@@ -19,15 +20,18 @@ df = files %>%
   map(read_csv2) %>%
   reduce(rbind)
 
-df= df %>% 
-  select(-age,-gender,-trial) %>%
-  mutate(RT = as.numeric(RT),
-         choiceName = factor(choiceName),
-         voice = factor(voice)) %>%
-  filter(RT<3)
+df$participant <- factor(df$participant)
+df$language    <- factor(df$language)
+df$gender      <- factor(df$gender)
+df$voice       <- factor(df$voice)
+df$left        <- factor(df$left)
+df$right       <- factor(df$right)
+df$choice      <- factor(df$choice)
+df$choiceName  <- factor(df$choiceName)
+df$RT          <- as.numeric(df$RT)
 
 ###### CREATE VARIABLES ###################################################
-df = df %>%
+df %<>%
     mutate(
       targetBetween = ifelse(
       (voice =="low" & (left =="low" | left=="big")  & (right =="low" | right=="big")) |
